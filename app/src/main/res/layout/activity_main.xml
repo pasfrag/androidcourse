@@ -29,7 +29,10 @@
       android:layout_marginStart="19dp"
       android:layout_alignBaseline="@+id/tv_destination"
       android:layout_alignBottom="@+id/tv_destination"
-      android:layout_toEndOf="@+id/tv_destination"/>
+      android:layout_toEndOf="@+id/tv_destination"
+      android:completionThreshold="2"
+      android:dropDownWidth="300sp"
+      android:dropDownHorizontalOffset="@dimen/activity_horizontal_margin"/>
 
 
   <AutoCompleteTextView
@@ -39,37 +42,20 @@
       android:hint="Start from"
       android:textSize="22sp"
       android:layout_alignParentTop="true"
-      android:layout_alignEnd="@+id/atv_destination_location"/>
+      android:layout_alignEnd="@+id/atv_destination_location"
+      android:completionThreshold="2"
+      android:dropDownWidth="300sp"
+      android:dropDownHorizontalOffset="@dimen/activity_horizontal_margin"/>
 
   <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/tv_destination"
-    android:text="Destination location"
-    android:textSize="22sp"
-    android:layout_marginTop="94dp"
-    android:layout_below="@+id/atv_origin_location"
-    android:layout_alignParentStart="true"/>
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/tv_destination"
+      android:text="Destination location"
+      android:textSize="22sp"
+      android:layout_marginTop="94dp"
+      android:layout_below="@+id/atv_origin_location"
+      android:layout_alignParentStart="true"/>
 
-  <ListView
-    android:id="@+id/lv_origin"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:visibility="invisible"
-    android:layout_above="@+id/atv_destination_location"
-    android:layout_marginBottom="15dp"
-    android:layout_below="@+id/atv_origin_location"
-    android:layout_alignParentStart="true">
-
-  </ListView>
-
-  <ListView
-    android:id="@+id/lv_destination"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:visibility="invisible"
-    android:layout_below="@id/atv_destination_location">
-
-  </ListView>
 
 </RelativeLayout>

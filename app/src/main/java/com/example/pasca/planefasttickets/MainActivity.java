@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity  {
     private ArrayAdapter<String> airportOriginAdapter, airportDestinationAdapter;
     private String[] airportNames, airportValues;
     private int tvController;
-    private ListView originLV, destinationLV;
     private AirportWatcher originWatcher, destinationWatcher;
 
 
@@ -52,13 +51,11 @@ public class MainActivity extends AppCompatActivity  {
         originWatcher = new AirportWatcher();
         destinationWatcher = new AirportWatcher();
 
-        originLV = (ListView) findViewById(R.id.lv_origin);
         airportOriginAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
-        originLV.setAdapter(airportOriginAdapter);
+        originTextView.setAdapter(airportOriginAdapter);
 
-        destinationLV = (ListView) findViewById(R.id.lv_destination);
         airportDestinationAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
-        destinationLV.setAdapter(airportDestinationAdapter);
+        destinationTextView.setAdapter(airportDestinationAdapter);
 
 
         originTextView.addTextChangedListener(originWatcher);
@@ -131,9 +128,9 @@ public class MainActivity extends AppCompatActivity  {
             getJSONData(s);
 
             if (tvController == 1){
-                adjustTheAdapters(airportOriginAdapter, originLV);
+                adjustTheAdapters(airportOriginAdapter, originTextView);
             }else if (tvController == 2){
-                adjustTheAdapters(airportDestinationAdapter, destinationLV);
+                adjustTheAdapters(airportDestinationAdapter, destinationTextView);
             }
 
         }
@@ -200,7 +197,7 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-    public void adjustTheAdapters(ArrayAdapter<String> adapter, ListView listView){
+    public void adjustTheAdapters(ArrayAdapter<String> adapter, AutoCompleteTextView listView){
         if(adapter != null) {
             adapter.clear();
         }
@@ -209,7 +206,7 @@ public class MainActivity extends AppCompatActivity  {
             adapter.add(airportName);
             adapter.notifyDataSetChanged();
         }
+        listView.showDropDown();
 
-        listView.setVisibility(View.VISIBLE);
     }
 }

@@ -10,33 +10,9 @@
       android:paddingTop="@dimen/activity_vertical_margin"
       tools:context="com.example.pasca.planefasttickets.MainActivity">
 
-  <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:id="@+id/tv_origin"
-      android:text="Origin location"
-      android:textSize="22sp"
-      android:layout_alignBaseline="@+id/atv_origin_location"
-      android:layout_alignBottom="@+id/atv_origin_location"
-      android:layout_alignParentStart="true"/>
 
   <AutoCompleteTextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:id="@+id/atv_destination_location"
-      android:hint="Go to         "
-      android:textSize="22sp"
-      android:layout_marginStart="19dp"
-      android:layout_alignBaseline="@+id/tv_destination"
-      android:layout_alignBottom="@+id/tv_destination"
-      android:layout_toEndOf="@+id/tv_destination"
-      android:completionThreshold="2"
-      android:dropDownWidth="300sp"
-      android:dropDownHorizontalOffset="@dimen/activity_horizontal_margin"/>
-
-
-  <AutoCompleteTextView
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:id="@+id/atv_origin_location"
       android:hint="Start from"
@@ -47,14 +23,51 @@
       android:dropDownWidth="300sp"
       android:dropDownHorizontalOffset="@dimen/activity_horizontal_margin"/>
 
-  <TextView
-      android:layout_width="wrap_content"
+  <AutoCompleteTextView
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:id="@+id/tv_destination"
-      android:text="Destination location"
+      android:id="@+id/atv_destination_location"
+      android:hint="Go to"
       android:textSize="22sp"
-      android:layout_marginTop="94dp"
+      android:completionThreshold="2"
+      android:dropDownWidth="300sp"
+      android:dropDownHorizontalOffset="@dimen/activity_horizontal_margin"
+      android:layout_marginTop="12dp"
       android:layout_below="@+id/atv_origin_location"
+      android:layout_centerHorizontal="true"/>
+
+  <EditText
+      android:id="@+id/et_departure_date"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="Departure date"
+      android:textSize="22sp"
+      android:layout_marginTop="32dp"
+      android:layout_below="@+id/atv_destination_location"
+      android:layout_alignParentStart="true"
+      android:focusable="false"/>
+
+  <EditText
+      android:id="@+id/et_return_date"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="Return date"
+      android:textSize="22sp"
+      android:layout_marginTop="11dp"
+      android:focusable="false"
+      android:layout_below="@+id/switch_return"
+      android:layout_alignParentStart="true"
+      android:visibility="invisible"/>
+
+  <Switch
+      android:id="@+id/switch_return"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="Without return"
+      android:textOn=""
+      android:textOff=""
+      android:layout_marginTop="12dp"
+      android:layout_below="@+id/et_departure_date"
       android:layout_alignParentStart="true"/>
 
 

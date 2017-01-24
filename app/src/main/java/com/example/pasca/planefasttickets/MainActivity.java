@@ -1,16 +1,20 @@
 package com.example.pasca.planefasttickets;
 
+import android.app.DatePickerDialog;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.ListView;
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Switch;
 
 
 import org.json.JSONArray;
@@ -25,15 +29,22 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity  implements DatePickerDialog.OnDateSetListener {
 
     private AutoCompleteTextView originTextView, destinationTextView;
     private ArrayAdapter<String> airportOriginAdapter, airportDestinationAdapter;
     private String[] airportNames, airportValues;
     private int tvController;
+    private int depDay, depMonth, depYear, retDay, retMonth, retYear;
     private AirportWatcher originWatcher, destinationWatcher;
+    private String origin, destination;
+    private EditText depDate, retDate;
+    private Switch retSwitch;
+    private Calendar myCal;
 
 
     @Override
@@ -46,7 +57,16 @@ public class MainActivity extends AppCompatActivity  {
 
         airportNames = null;
         airportValues = null;
+
+        origin = null;
+        destination = null;
+
         tvController = 1;
+
+        depDate = (EditText) findViewById(R.id.et_departure_date);
+        retDate = (EditText) findViewById(R.id.et_return_date);
+
+        retSwitch = (Switch) findViewById(R.id.switch_return);
 
         originWatcher = new AirportWatcher();
         destinationWatcher = new AirportWatcher();
@@ -60,6 +80,71 @@ public class MainActivity extends AppCompatActivity  {
 
         originTextView.addTextChangedListener(originWatcher);
         destinationTextView.addTextChangedListener(destinationWatcher);
+
+        originTextView.setOnItemClickListener(new ItemClicked(1));
+
+
+        myCal = Calendar.getInstance();
+
+        depDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tvController = 1;
+                new DatePickerDialog(MainActivity.this, MainActivity.this, myCal.get(Calendar.YEAR), myCal.get(Calendar.MONTH), myCal.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        retDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tvController = 2;
+                new DatePickerDialog(MainActivity.this, MainActivity.this, myCal.get(Calendar.YEAR), myCal.get(Calendar.MONTH), myCal.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        retSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    retDate.setVisibility(View.VISIBLE);
+                    retSwitch.setHint("With return");
+                } else {
+                    retDate.setVisibility(View.INVISIBLE);
+                    retSwitch.setHint("Without return");
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+        myCal.set(Calendar.YEAR, year);
+        myCal.set(Calendar.MONTH, month);
+        myCal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        getDateData();
+    }
+
+    public void getDateData(){
+
+        String myformat = "yyyy-MM-dd";
+        SimpleDateFormat sdf = new SimpleDateFormat(myformat);
+
+        if (tvController == 1){
+            depDay = myCal.get(Calendar.DAY_OF_MONTH);
+            depMonth = myCal.get(Calendar.MONTH);
+            depYear = myCal.get(Calendar.YEAR);
+
+            depDate.setText(sdf.format(myCal.getTime()));
+
+        }else if (tvController == 2){
+            retDay = myCal.get(Calendar.DAY_OF_MONTH);
+            retMonth = myCal.get(Calendar.MONTH);
+            retYear = myCal.get(Calendar.YEAR);
+
+            retDate.setText(sdf.format(myCal.getTime()));
+        }
     }
 
 
@@ -112,11 +197,23 @@ public class MainActivity extends AppCompatActivity  {
             } catch (ProtocolException e) {
                 e.printStackTrace();
             }   catch (MalformedURLException e) {
-              e.printStackTrace();
+                e.printStackTrace();
             }   catch (IOException e) {
-              e.printStackTrace();
+                e.printStackTrace();
             }   catch (NullPointerException e) {
-              e.printStackTrace();
+                e.printStackTrace();
+            }
+            finally {
+                if (urlConnection != null){
+                    urlConnection.disconnect();
+                }
+                if (reader != null){
+                    try {
+                        reader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
 
@@ -161,10 +258,11 @@ public class MainActivity extends AppCompatActivity  {
         public void afterTextChanged(final Editable s) {
 
 
-            if (s.length()<3){
+            AutoCompleteTextView view = (AutoCompleteTextView) getCurrentFocus();
+            if (s.length()<3 || view.isPerformingCompletion()){
                 return;
             }
-            View view = getCurrentFocus();
+
             if (view == originTextView){
                 tvController = 1;
             }
@@ -209,4 +307,23 @@ public class MainActivity extends AppCompatActivity  {
         listView.showDropDown();
 
     }
+
+    public class ItemClicked implements AdapterView.OnItemClickListener {
+
+        private int TV;
+        public ItemClicked(int TV){
+            this.TV = TV;
+        }
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            if (TV == 1){
+                origin = airportValues[position];
+            }else if(TV == 2){
+                destination = airportValues[position];
+            }
+        }
+    }
+
+
 }

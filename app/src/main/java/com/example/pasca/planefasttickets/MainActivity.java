@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
         if (tvController == 1){
             depDate = sdf.format(myCal.getTime());
 
-            depDateET.setText(sdf.format(depDate));
+            depDateET.setText(depDate);
 
         }else if (tvController == 2){
             retDate = sdf.format(myCal.getTime());

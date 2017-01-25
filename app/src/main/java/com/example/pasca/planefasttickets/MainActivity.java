@@ -14,8 +14,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Switch;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,21 +33,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity  implements DatePickerDialog.OnDateSetListener {
+public class MainActivity extends AppCompatActivity  implements DatePickerDialog.OnDateSetListener, AdapterView.OnItemClickListener {
 
     private AutoCompleteTextView originTextView, destinationTextView;
     private ArrayAdapter<String> airportOriginAdapter, airportDestinationAdapter;
+    private ArrayAdapter<CharSequence> adultsAdapter, childAdapter;
     private String[] airportNames, airportValues;
     private int tvController;
-    private int depDay, depMonth, depYear, retDay, retMonth, retYear;
     private AirportWatcher originWatcher, destinationWatcher;
-    private String origin, destination;
-    private EditText depDate, retDate;
+    private String origin, destination, adults, children, depDate, retDate;
+    private EditText depDateET, retDateET;
     private Switch retSwitch;
     private Calendar myCal;
+    private Spinner adultSpinner, childSpinner;
 
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -63,8 +63,8 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
 
         tvController = 1;
 
-        depDate = (EditText) findViewById(R.id.et_departure_date);
-        retDate = (EditText) findViewById(R.id.et_return_date);
+        depDateET = (EditText) findViewById(R.id.et_departure_date);
+        retDateET = (EditText) findViewById(R.id.et_return_date);
 
         retSwitch = (Switch) findViewById(R.id.switch_return);
 
@@ -81,12 +81,47 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
         originTextView.addTextChangedListener(originWatcher);
         destinationTextView.addTextChangedListener(destinationWatcher);
 
-        originTextView.setOnItemClickListener(new ItemClicked(1));
+        originTextView.setOnItemClickListener(this);
+        destinationTextView.setOnItemClickListener(this);
 
+        adultSpinner = (Spinner) findViewById(R.id.spinner_adults);
+        childSpinner = (Spinner) findViewById(R.id.spinner_child);
+
+        adultsAdapter = ArrayAdapter.createFromResource(this, R.array.spinner_adult_text, android.R.layout.simple_spinner_item);
+        adultsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        childAdapter = ArrayAdapter.createFromResource(this, R.array.spinner_children_text, android.R.layout.simple_spinner_item);
+        adultsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        adultSpinner.setAdapter(adultsAdapter);
+        childSpinner.setAdapter(childAdapter);
+
+        adultSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                adults = adultsAdapter.getItem(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        childSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                children = childAdapter.getItem(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         myCal = Calendar.getInstance();
 
-        depDate.setOnClickListener(new View.OnClickListener() {
+        depDateET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tvController = 1;
@@ -94,7 +129,7 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
             }
         });
 
-        retDate.setOnClickListener(new View.OnClickListener() {
+        retDateET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tvController = 2;
@@ -106,17 +141,17 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                    retDate.setVisibility(View.VISIBLE);
+                    retDateET.setVisibility(View.VISIBLE);
                     retSwitch.setHint("With return");
                 } else {
-                    retDate.setVisibility(View.INVISIBLE);
+                    retDateET.setVisibility(View.INVISIBLE);
                     retSwitch.setHint("Without return");
                 }
             }
         });
     }
 
-    @Override
+    //Just a watcher
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
         myCal.set(Calendar.YEAR, year);
@@ -126,27 +161,32 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
         getDateData();
     }
 
+    //The method that retrieves the dates from
     public void getDateData(){
 
         String myformat = "yyyy-MM-dd";
         SimpleDateFormat sdf = new SimpleDateFormat(myformat);
 
         if (tvController == 1){
-            depDay = myCal.get(Calendar.DAY_OF_MONTH);
-            depMonth = myCal.get(Calendar.MONTH);
-            depYear = myCal.get(Calendar.YEAR);
+            depDate = sdf.format(myCal.getTime());
 
-            depDate.setText(sdf.format(myCal.getTime()));
+            depDateET.setText(sdf.format(depDate));
 
         }else if (tvController == 2){
-            retDay = myCal.get(Calendar.DAY_OF_MONTH);
-            retMonth = myCal.get(Calendar.MONTH);
-            retYear = myCal.get(Calendar.YEAR);
+            retDate = sdf.format(myCal.getTime());
 
-            retDate.setText(sdf.format(myCal.getTime()));
+            retDateET.setText(retDate);
         }
     }
 
+    //The listener for a an item to be clicked in the auutocomlete views
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (tvController == 1){
+            origin = airportValues[position];
+        }else if(tvController == 2){
+            destination = airportValues[position];
+        }
+    }
 
     //This class gets the airport names and values from amadeus api
     //and fills the adapters
@@ -275,6 +315,7 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
         }
     }
 
+    //This is the method that converts the response to string data
     public void getJSONData(String JSONString) {
 
         try {
@@ -295,6 +336,7 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
 
     }
 
+    //The method that fills the adapters
     public void adjustTheAdapters(ArrayAdapter<String> adapter, AutoCompleteTextView listView){
         if(adapter != null) {
             adapter.clear();
@@ -307,23 +349,5 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
         listView.showDropDown();
 
     }
-
-    public class ItemClicked implements AdapterView.OnItemClickListener {
-
-        private int TV;
-        public ItemClicked(int TV){
-            this.TV = TV;
-        }
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            if (TV == 1){
-                origin = airportValues[position];
-            }else if(TV == 2){
-                destination = airportValues[position];
-            }
-        }
-    }
-
 
 }

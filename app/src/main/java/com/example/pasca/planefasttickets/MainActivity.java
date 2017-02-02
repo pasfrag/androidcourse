@@ -1,12 +1,19 @@
 package com.example.pasca.planefasttickets;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,6 +23,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,17 +43,22 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity  implements DatePickerDialog.OnDateSetListener, AdapterView.OnItemClickListener {
 
+    //Defining data variables
+    private String origin, destination, adults, children, depDate, retDate, direct;
+
+    //Defining UI variables
     private AutoCompleteTextView originTextView, destinationTextView;
+    private EditText depDateET, retDateET;
+    private Switch retSwitch;
+    private Spinner adultSpinner, childSpinner;
+
+    //Defining data variables for UI
+    private Calendar myCal;
+    private int tvController;
+    private AirportWatcher originWatcher, destinationWatcher;
     private ArrayAdapter<String> airportOriginAdapter, airportDestinationAdapter;
     private ArrayAdapter<CharSequence> adultsAdapter, childAdapter;
     private String[] airportNames, airportValues;
-    private int tvController;
-    private AirportWatcher originWatcher, destinationWatcher;
-    private String origin, destination, adults, children, depDate, retDate;
-    private EditText depDateET, retDateET;
-    private Switch retSwitch;
-    private Calendar myCal;
-    private Spinner adultSpinner, childSpinner;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +164,22 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
         });
     }
 
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.settings, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings){
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     //Just a watcher
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
@@ -199,7 +228,7 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
         @Override
         protected String doInBackground(String... params) {
 
-            if (params.length==0){
+            if (params.length==0 || !isOnline()){
                 return null;
             }
             String location = params[0];
@@ -262,6 +291,11 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
 
         @Override
         protected void onPostExecute(String s) {
+            if (!isOnline()){
+                Toast toast = Toast.makeText(MainActivity.this, "There is no internet connection", Toast.LENGTH_SHORT);
+                toast.show();
+                return;
+            }
             getJSONData(s);
 
             if (tvController == 1){
@@ -348,6 +382,15 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
         }
         listView.showDropDown();
 
+    }
+
+
+    //A method to check network connection
+    public boolean isOnline() {
+        ConnectivityManager cm =
+          (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
 }

@@ -296,6 +296,11 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
                 toast.show();
                 return;
             }
+            if(s == null){
+                Toast toast = Toast.makeText(MainActivity.this, "There is no data to show", Toast.LENGTH_SHORT);
+                toast.show();
+                return;
+            }
             getJSONData(s);
 
             if (tvController == 1){

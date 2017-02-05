@@ -19,7 +19,7 @@ public class UrlBuildingUtils {
     private final static String PRICE_PARAM = "max_price";
     private final static String CURRENCY_PARAM = "currency";
     private final static String RESULTS = "number_of_results";
-    private final static String API_KEY = "tIHCa5bMukDGHL8h0439NVyLuVEwxwMx";
+    private final static String API_KEY = "MKeJmVv3g1SyMW7PM0WWZ3GDyGCQtAR4";
 
 
     //Builds the uri

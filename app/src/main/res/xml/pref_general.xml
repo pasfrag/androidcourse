@@ -4,7 +4,8 @@
         android:key="curr_list"
         android:title="Currency"
         android:entries="@array/currency_name"
-        android:entryValues="@array/currency_value">
+        android:entryValues="@array/currency_value"
+        android:defaultValue="1">
 
     </ListPreference>
 </PreferenceScreen>

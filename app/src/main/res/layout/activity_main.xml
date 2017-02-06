@@ -59,57 +59,85 @@
       android:layout_alignParentStart="true"/>
 
   <EditText
-    android:id="@+id/et_return_date"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="Return date"
-    android:textSize="22sp"
-    android:layout_marginTop="12dp"
-    android:focusable="false"
-    android:visibility="invisible"
-    android:layout_below="@+id/switch_return"
-    android:layout_alignParentStart="true"/>
+      android:id="@+id/et_return_date"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="Return date"
+      android:textSize="22sp"
+      android:layout_marginTop="12dp"
+      android:focusable="false"
+      android:visibility="invisible"
+      android:layout_below="@+id/switch_return"
+      android:layout_alignParentStart="true"/>
 
   <Spinner
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/spinner_child"
-    android:layout_marginTop="24dp"
-    android:layout_marginEnd="20dp"
-    android:layout_below="@+id/et_return_date"
-    android:layout_alignParentEnd="true">
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/spinner_child"
+      android:layout_marginTop="24dp"
+      android:layout_marginEnd="20dp"
+      android:layout_below="@+id/et_return_date"
+      android:layout_alignParentEnd="true">
 
   </Spinner>
 
   <Spinner
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="99dp"
-    android:id="@+id/spinner_adults"
-    android:layout_alignTop="@+id/spinner_child"
-    android:layout_alignParentStart="true">
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="99dp"
+      android:id="@+id/spinner_adults"
+      android:layout_alignTop="@+id/spinner_child"
+      android:layout_alignParentStart="true">
 
   </Spinner>
 
   <TextView
-    android:text="Adults:"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignTop="@+id/spinner_adults"
-    android:layout_alignParentStart="true"
-    android:layout_marginStart="14dp"
-    android:id="@+id/textView"
-    android:layout_alignBottom="@+id/spinner_adults"/>
+      android:text="Adults:"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignTop="@+id/spinner_adults"
+      android:layout_alignParentStart="true"
+      android:layout_marginStart="14dp"
+      android:id="@+id/textView"
+      android:layout_alignBottom="@+id/spinner_adults"/>
 
   <TextView
-    android:text="Kids:"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignTop="@+id/spinner_child"
-    android:layout_toStartOf="@+id/spinner_child"
-    android:layout_marginEnd="21dp"
-    android:id="@+id/textView2"
-    android:layout_alignBottom="@+id/spinner_child"/>
+      android:text="Kids:"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignTop="@+id/spinner_child"
+      android:layout_toStartOf="@+id/spinner_child"
+      android:layout_marginEnd="21dp"
+      android:id="@+id/textView2"
+      android:layout_alignBottom="@+id/spinner_child"/>
+
+  <CheckBox
+      android:text="With stops"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="42dp"
+      android:id="@+id/checkBox"
+      android:layout_below="@+id/spinner_adults"
+      android:layout_alignStart="@+id/textView"
+      android:layout_marginStart="11dp"/>
+
+  <EditText
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:inputType="numberDecimal"
+      android:ems="10"
+      android:id="@+id/editText"
+      android:layout_alignTop="@+id/checkBox"
+      android:layout_toEndOf="@+id/spinner_adults"
+      android:hint="Max price"/>
+
+  <Button
+      android:text="Search flights"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/search_button"
+      android:layout_alignParentBottom="true"
+      android:layout_centerHorizontal="true"/>
 
 
 </RelativeLayout>

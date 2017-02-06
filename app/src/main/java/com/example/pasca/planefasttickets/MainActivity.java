@@ -7,20 +7,27 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -41,16 +48,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity  implements DatePickerDialog.OnDateSetListener, AdapterView.OnItemClickListener {
+public class MainActivity extends AppCompatActivity  implements DatePickerDialog.OnDateSetListener, AdapterView.OnItemClickListener, View.OnClickListener {
 
     //Defining data variables
-    private String origin, destination, adults, children, depDate, retDate, direct;
+    private String origin, destination, adults, children, depDate, retDate, direct, price;
 
     //Defining UI variables
     private AutoCompleteTextView originTextView, destinationTextView;
     private EditText depDateET, retDateET;
     private Switch retSwitch;
     private Spinner adultSpinner, childSpinner;
+    private CheckBox directCB;
+    private Button searchButton;
 
     //Defining data variables for UI
     private Calendar myCal;
@@ -71,8 +80,16 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
         airportNames = null;
         airportValues = null;
 
+        adults = "1";
+        children = null;
+
         origin = null;
         destination = null;
+
+        direct = "false";
+        price = null;
+        depDate = null;
+        retDate = null;
 
         tvController = 1;
 
@@ -104,7 +121,7 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
         adultsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         childAdapter = ArrayAdapter.createFromResource(this, R.array.spinner_children_text, android.R.layout.simple_spinner_item);
-        adultsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        childAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         adultSpinner.setAdapter(adultsAdapter);
         childSpinner.setAdapter(childAdapter);
@@ -134,21 +151,8 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
 
         myCal = Calendar.getInstance();
 
-        depDateET.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tvController = 1;
-                new DatePickerDialog(MainActivity.this, MainActivity.this, myCal.get(Calendar.YEAR), myCal.get(Calendar.MONTH), myCal.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-
-        retDateET.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tvController = 2;
-                new DatePickerDialog(MainActivity.this, MainActivity.this, myCal.get(Calendar.YEAR), myCal.get(Calendar.MONTH), myCal.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
+        depDateET.setOnClickListener(this);
+        retDateET.setOnClickListener(this);
 
         retSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -162,6 +166,12 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
                 }
             }
         });
+
+        directCB = (CheckBox) findViewById(R.id.checkBox);
+        directCB.setOnClickListener(this);
+
+        searchButton = (Button) findViewById(R.id.search_button);
+        searchButton.setOnClickListener(this);
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
@@ -215,6 +225,38 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
         }else if(tvController == 2){
             destination = airportValues[position];
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == retDateET){
+            tvController = 2;
+            new DatePickerDialog(MainActivity.this, MainActivity.this, myCal.get(Calendar.YEAR), myCal.get(Calendar.MONTH), myCal.get(Calendar.DAY_OF_MONTH)).show();
+        }
+        else if (v == depDateET){
+            tvController = 1;
+            new DatePickerDialog(MainActivity.this, MainActivity.this, myCal.get(Calendar.YEAR), myCal.get(Calendar.MONTH), myCal.get(Calendar.DAY_OF_MONTH)).show();
+        }
+        else if (v == directCB){
+            if(directCB.isChecked()){
+                direct = "true";
+                directCB.setText("Without stops");
+            }else{
+                direct = "false";
+                directCB.setText("With stops");
+            }
+        }
+        else if (v == searchButton){
+            if (isPressable()){
+                Toast toast = Toast.makeText(MainActivity.this, "You can press this button", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+            else{
+                Toast toast = Toast.makeText(MainActivity.this, "You can't press this button", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        }
+
     }
 
     //This class gets the airport names and values from amadeus api
@@ -396,6 +438,13 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
           (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    public boolean isPressable(){
+        if (origin == null || destination == null || depDate == null){
+            return false;
+        }
+        return true;
     }
 
 }

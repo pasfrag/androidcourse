@@ -15,7 +15,7 @@ public class SettingsActivity extends PreferenceActivity
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_general);
 
-        bindPreferenceSummaryToValue(findPreference("curr_list"));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.curr_pref_key)));
     }
 
     private void bindPreferenceSummaryToValue(Preference preference) {

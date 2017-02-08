@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">PlaneFastTickets</string>
+    <string name="curr_pref_title">Currency</string>
+    <string name="curr_pref_key" translatable="false">curr_list</string>
+    <string name="curr_pref_def_val" translatable="false">EUR</string>
 
     <string-array name="spinner_adult_text">
         <item>1</item>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <ListPreference
-        android:key="curr_list"
-        android:title="Currency"
+        android:key="@string/curr_pref_key"
+        android:title="@string/curr_pref_title"
         android:entries="@array/currency_name"
         android:entryValues="@array/currency_value"
-        android:defaultValue="1">
+        android:defaultValue="@string/curr_pref_def_val">
 
     </ListPreference>
 </PreferenceScreen>

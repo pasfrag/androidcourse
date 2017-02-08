@@ -3,16 +3,19 @@ package com.example.pasca.planefasttickets;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -55,7 +58,7 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
 
     //Defining UI variables
     private AutoCompleteTextView originTextView, destinationTextView;
-    private EditText depDateET, retDateET;
+    private EditText depDateET, retDateET, priceET;
     private Switch retSwitch;
     private Spinner adultSpinner, childSpinner;
     private CheckBox directCB;
@@ -81,7 +84,7 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
         airportValues = null;
 
         adults = "1";
-        children = null;
+        children = "0";
 
         origin = null;
         destination = null;
@@ -95,6 +98,23 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
 
         depDateET = (EditText) findViewById(R.id.et_departure_date);
         retDateET = (EditText) findViewById(R.id.et_return_date);
+
+        priceET = (EditText) findViewById(R.id.price_et);
+
+        priceET.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN){
+                    switch (keyCode){
+                        case KeyEvent.KEYCODE_ENTER:
+                            price = priceET.getText().toString();
+                            return true;
+                    }
+
+                }
+                return false;
+            }
+        });
 
         retSwitch = (Switch) findViewById(R.id.switch_return);
 
@@ -248,7 +268,8 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
         }
         else if (v == searchButton){
             if (isPressable()){
-                Toast toast = Toast.makeText(MainActivity.this, "You can press this button", Toast.LENGTH_SHORT);
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                Toast toast = Toast.makeText(MainActivity.this, preferences.getString("curr_list", "EUR"), Toast.LENGTH_SHORT);
                 toast.show();
             }
             else{

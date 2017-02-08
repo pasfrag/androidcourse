@@ -126,7 +126,7 @@
       android:layout_height="wrap_content"
       android:inputType="numberDecimal"
       android:ems="10"
-      android:id="@+id/editText"
+      android:id="@+id/price_et"
       android:layout_alignTop="@+id/checkBox"
       android:layout_toEndOf="@+id/spinner_adults"
       android:hint="Max price"/>

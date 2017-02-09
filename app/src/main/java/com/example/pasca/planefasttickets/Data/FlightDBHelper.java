@@ -16,35 +16,29 @@ public class FlightDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        final String SQL_CREATE_OUTBOUND_TABLE = "CREATE TABLE " + FligthsContract.InboundEntry.TABLE_NAME + " (" +
-                FligthsContract.InboundEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+        final String SQL_CREATE_OUTBOUND_TABLE = "CREATE TABLE " + FligthsContract.FlightsEntry.TABLE_NAME + " (" +
+                FligthsContract.FlightsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
 
                 // the ID of the location entry associated with this weather data
-                FligthsContract.OutboundEntry.COLUMN_DEPARTURE + " TEXT NOT NULL, " +
-                FligthsContract.OutboundEntry.COLUMN_ARRIVAL + " TEXT NOT NULL, " +
-                FligthsContract.OutboundEntry.COLUMN_NUMS_OF_FLIGHTS + " INTEGER NOT NULL," +
+                FligthsContract.FlightsEntry.COLUMN_DEPARTURE + " TEXT NOT NULL, " +
+                FligthsContract.FlightsEntry.COLUMN_ARRIVAL + " TEXT NOT NULL, " +
+                FligthsContract.FlightsEntry.COLUMN_NUMS_OF_FLIGHTS + " INTEGER NOT NULL," +
 
-                FligthsContract.OutboundEntry.COLUMN_PRICE + " REAL NOT NULL, " +
-                FligthsContract.OutboundEntry.COLUMN_AIRPORTS + " TEXT NOT NULL, " +
+                FligthsContract.FlightsEntry.COLUMN_PRICE + " REAL NOT NULL, " +
+                FligthsContract.FlightsEntry.COLUMN_AIRPORTS + " TEXT NOT NULL, " +
 
-                FligthsContract.OutboundEntry.COLUMN_COMPANIES + " TEXT NOT NULL);";
+                FligthsContract.FlightsEntry.COLUMN_COMPANIES + " TEXT NOT NULL, " +
 
+                FligthsContract.FlightsEntry.COLUMN_DEPARTURE_R + " TEXT, " +
+                FligthsContract.FlightsEntry.COLUMN_ARRIVAL_R + " TEXT, " +
+                FligthsContract.FlightsEntry.COLUMN_NUMS_OF_FLIGHTS_R + " INTEGER," +
 
-        final String SQL_CREATE_INBOUND_TABLE = "CREATE TABLE " + FligthsContract.InboundEntry.TABLE_NAME + " (" +
-                FligthsContract.InboundEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                FligthsContract.FlightsEntry.COLUMN_AIRPORTS_R + " TEXT, " +
 
-                // the ID of the location entry associated with this weather data
-                FligthsContract.InboundEntry.COLUMN_DEPARTURE + " TEXT NOT NULL, " +
-                FligthsContract.InboundEntry.COLUMN_ARRIVAL + " TEXT NOT NULL, " +
-                FligthsContract.InboundEntry.COLUMN_NUMS_OF_FLIGHTS + " INTEGER NOT NULL," +
+                FligthsContract.FlightsEntry.COLUMN_COMPANIES_R + " TEXT);";
 
-                FligthsContract.InboundEntry.COLUMN_PRICE + " REAL NOT NULL, " +
-                FligthsContract.InboundEntry.COLUMN_AIRPORTS + " TEXT NOT NULL, " +
-
-                FligthsContract.InboundEntry.COLUMN_COMPANIES + " TEXT NOT NULL);";
 
         db.execSQL(SQL_CREATE_OUTBOUND_TABLE);
-        db.execSQL(SQL_CREATE_INBOUND_TABLE);
     }
 
 
@@ -52,8 +46,7 @@ public class FlightDBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        db.execSQL("DROP TABLE IF EXISTS " + FligthsContract.OutboundEntry.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + FligthsContract.InboundEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + FligthsContract.FlightsEntry.TABLE_NAME);
         onCreate(db);
     }
 }

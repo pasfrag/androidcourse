@@ -4,7 +4,6 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -15,19 +14,15 @@ public class FlightProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     private FlightDBHelper mOpenHelper;
 
-    static final int OUTBOUND = 100;
-    static final int OUTBOUND_ROW = 101;
-    static final int INBOUND = 200;
-    static final int INBOUND_ROW = 201;
+    static final int FLIGHTS = 100;
+    static final int FLIGHTS_ROW = 101;
 
 
 
     static {
         String authority = FligthsContract.CONTENT_AUTHORITY;
-        sUriMatcher.addURI(authority, FligthsContract.PATH_OUTBOUND, OUTBOUND);
-        sUriMatcher.addURI(authority, FligthsContract.PATH_OUTBOUND + "/#", OUTBOUND_ROW);
-        sUriMatcher.addURI(authority, FligthsContract.PATH_INBOUND, INBOUND);
-        sUriMatcher.addURI(authority, FligthsContract.PATH_INBOUND + "/#", INBOUND_ROW);
+        sUriMatcher.addURI(authority, FligthsContract.PATH_FLIGHTS, FLIGHTS);
+        sUriMatcher.addURI(authority, FligthsContract.PATH_FLIGHTS + "/#", FLIGHTS_ROW);
 
     }
 
@@ -41,34 +36,21 @@ public class FlightProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Cursor retCursor;
-        String tableName;
 
         switch (sUriMatcher.match(uri)){
-            case OUTBOUND:
+            case FLIGHTS:
                 if (TextUtils.isEmpty(sortOrder)) {
                     sortOrder = "_ID ASC";
                 }
-                tableName = FligthsContract.OutboundEntry.TABLE_NAME;
                 break;
-            case OUTBOUND_ROW:
+            case FLIGHTS_ROW:
                 selection = selection + "_ID = " + uri.getLastPathSegment();
-                tableName = FligthsContract.OutboundEntry.TABLE_NAME;
-                break;
-            case INBOUND:
-                if (TextUtils.isEmpty(sortOrder)) {
-                    sortOrder = "_ID ASC";
-                }
-                tableName = FligthsContract.InboundEntry.TABLE_NAME;
-                break;
-            case INBOUND_ROW:
-                selection = selection + "_ID = " + uri.getLastPathSegment();
-                tableName = FligthsContract.InboundEntry.TABLE_NAME;
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
         retCursor = mOpenHelper.getReadableDatabase().query(
-              tableName,
+              FligthsContract.FlightsEntry.TABLE_NAME,
               projection,
               selection,
               selectionArgs,
@@ -87,14 +69,10 @@ public class FlightProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
 
         switch (match){
-            case OUTBOUND:
-                return FligthsContract.OutboundEntry.CONTENT_TYPE;
-            case OUTBOUND_ROW:
-                return FligthsContract.OutboundEntry.CONTENT_ITEM_TYPE;
-            case INBOUND:
-                return FligthsContract.InboundEntry.CONTENT_TYPE;
-            case INBOUND_ROW:
-                return FligthsContract.InboundEntry.CONTENT_ITEM_TYPE;
+            case FLIGHTS:
+                return FligthsContract.FlightsEntry.CONTENT_TYPE;
+            case FLIGHTS_ROW:
+                return FligthsContract.FlightsEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -109,14 +87,9 @@ public class FlightProvider extends ContentProvider {
         long _id;
 
         switch (match){
-            case OUTBOUND:
-                _id = db.insert(FligthsContract.OutboundEntry.TABLE_NAME, null, values);
-                if (_id > 0) returnUri = FligthsContract.OutboundEntry.buildOutboundFlight(_id);
-                else throw new android.database.SQLException("Failed to insert row into " + uri);
-                break;
-            case INBOUND:
-                _id = db.insert(FligthsContract.InboundEntry.TABLE_NAME, null, values);
-                if (_id > 0) returnUri = FligthsContract.InboundEntry.buildOutboundFlight(_id);
+            case FLIGHTS:
+                _id = db.insert(FligthsContract.FlightsEntry.TABLE_NAME, null, values);
+                if (_id > 0) returnUri = FligthsContract.FlightsEntry.buildFlight(_id);
                 else throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
             default:
@@ -134,11 +107,8 @@ public class FlightProvider extends ContentProvider {
         int rowsDeleted = 0;
         if (selection == null) selection="1";
         switch(match){
-            case OUTBOUND:
-                rowsDeleted = db.delete(FligthsContract.OutboundEntry.TABLE_NAME, selection, selectionArgs);
-                break;
-            case INBOUND:
-                rowsDeleted = db.delete(FligthsContract.InboundEntry.TABLE_NAME, selection, selectionArgs);
+            case FLIGHTS:
+                rowsDeleted = db.delete(FligthsContract.FlightsEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -156,13 +126,9 @@ public class FlightProvider extends ContentProvider {
         int rowsUpdated = 0;
 
         switch (match){
-            case OUTBOUND:
+            case FLIGHTS:
                 rowsUpdated =
-                    db.update(FligthsContract.OutboundEntry.TABLE_NAME, values, selection, selectionArgs);
-                break;
-            case INBOUND:
-                rowsUpdated =
-                    db.update(FligthsContract.InboundEntry.TABLE_NAME, values, selection, selectionArgs);
+                    db.update(FligthsContract.FlightsEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -178,27 +144,11 @@ public class FlightProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         int returnCount = 0;
         switch (match){
-            case OUTBOUND:
+            case FLIGHTS:
                 db.beginTransaction();
                 try{
                     for (ContentValues value : values){
-                        long _id = db.insert(FligthsContract.OutboundEntry.TABLE_NAME, null, value);
-                        if (_id != -1){
-                            returnCount++;
-                        }
-                    }
-                    db.setTransactionSuccessful();
-                }
-                finally {
-                    db.endTransaction();
-                }
-                getContext().getContentResolver().notifyChange(uri,null);
-                return returnCount;
-            case INBOUND:
-                db.beginTransaction();
-                try{
-                    for (ContentValues value : values){
-                        long _id = db.insert(FligthsContract.InboundEntry.TABLE_NAME, null, value);
+                        long _id = db.insert(FligthsContract.FlightsEntry.TABLE_NAME, null, value);
                         if (_id != -1){
                             returnCount++;
                         }

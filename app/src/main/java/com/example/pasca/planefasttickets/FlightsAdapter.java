@@ -23,6 +23,7 @@ public class FlightsAdapter extends CursorAdapter {
         return (withReturn) ? VIEW_TYPE_WITH : VIEW_TYPE_WITHOUT;
     }
 
+    public int getViewTypeCount(){return 2;}
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         int viewType = getItemViewType();
@@ -44,9 +45,11 @@ public class FlightsAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
+        ViewHolder viewHolder = (ViewHolder) view.getTag();
 
 
     }
+
     public static class ViewHolder{
         public final TextView depTV;
         public final TextView arrTV;

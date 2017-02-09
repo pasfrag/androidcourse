@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center_vertical">
+
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal">
+
+
+    <TextView
+      android:id="@+id/departure_tv"
+      android:layout_width="1dp"
+      android:layout_height="wrap_content"
+      android:hint="17:45"
+      android:layout_weight="1"
+      android:gravity="center_horizontal"/>
+
+    <TextView
+      android:id="@+id/arrival_tv"
+      android:layout_width="1dp"
+      android:layout_height="wrap_content"
+      android:hint="21:13"
+      android:layout_weight="1"
+      android:gravity="center_horizontal"/>
+
+    <TextView
+      android:text="Total price:"
+      android:layout_width="1dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:gravity="center_horizontal"
+      />
+
+
+  </LinearLayout>
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal">
+
+
+    <TextView
+      android:id="@+id/departure_ret_tv"
+      android:layout_width="1dp"
+      android:layout_height="wrap_content"
+      android:hint="17:45"
+      android:layout_weight="1"
+      android:gravity="center_horizontal"/>
+
+    <TextView
+      android:id="@+id/arrival_ret_tv"
+      android:layout_width="1dp"
+      android:layout_height="wrap_content"
+      android:hint="21:13"
+      android:layout_weight="1"
+      android:gravity="center_horizontal"/>
+
+    <TextView
+      android:id="@+id/price_tv"
+      android:layout_width="1dp"
+      android:layout_height="wrap_content"
+      android:hint="500"
+      android:layout_weight="1"
+      android:gravity="center_horizontal"/>
+
+  </LinearLayout>
+
+</LinearLayout>

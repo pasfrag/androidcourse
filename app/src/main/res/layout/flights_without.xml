@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center_horizontal">
+
+
+  <TextView
+      android:id="@+id/departure_tv2"
+      android:layout_width="1dp"
+      android:layout_height="wrap_content"
+      android:hint="17:45"
+      android:layout_weight="1"
+      android:gravity="center_horizontal"/>
+
+  <TextView
+      android:id="@+id/arrival_tv2"
+      android:layout_width="1dp"
+      android:layout_height="wrap_content"
+      android:hint="21:13"
+      android:layout_weight="1"
+      android:gravity="center_horizontal"/>
+
+  <TextView
+      android:id="@+id/price_tv2"
+      android:layout_width="1dp"
+      android:layout_height="wrap_content"
+      android:hint="500"
+      android:layout_weight="1"
+      android:gravity="center_horizontal"/>
+
+</LinearLayout>

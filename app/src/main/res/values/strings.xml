@@ -1,46 +1,46 @@
 <resources>
-    <string name="app_name">PlaneFastTickets</string>
-    <string name="curr_pref_title">Currency</string>
-    <string name="curr_pref_key" translatable="false">curr_list</string>
-    <string name="curr_pref_def_val" translatable="false">EUR</string>
+  <string name="app_name">PlaneFastTickets</string>
+  <string name="curr_pref_title">Currency</string>
+  <string name="curr_pref_key" translatable="false">curr_list</string>
+  <string name="curr_pref_def_val" translatable="false">EUR</string>
 
-    <string-array name="spinner_adult_text">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-    </string-array>
+  <string-array name="spinner_adult_text">
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+    <item>4</item>
+    <item>5</item>
+    <item>6</item>
+    <item>7</item>
+    <item>8</item>
+    <item>9</item>
+  </string-array>
 
-    <string-array name="spinner_children_text">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-    </string-array>
+  <string-array name="spinner_children_text">
+    <item>0</item>
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+    <item>4</item>
+    <item>5</item>
+    <item>6</item>
+    <item>7</item>
+    <item>8</item>
+    <item>9</item>
+  </string-array>
 
-    <string-array name="currency_name">
-        <item>Euro</item>
-        <item>Japanese yen</item>
-        <item>Australian dollar</item>
-        <item>United States dollar</item>
-    </string-array>
+  <string-array name="currency_name">
+    <item>Euro</item>
+    <item>Japanese yen</item>
+    <item>Australian dollar</item>
+    <item>United States dollar</item>
+  </string-array>
 
-    <string-array name="currency_value">
-        <item>EUR</item>
-        <item>JPY</item>
-        <item>AUD</item>
-        <item>USD</item>
-    </string-array>
+  <string-array name="currency_value">
+    <item>EUR</item>
+    <item>JPY</item>
+    <item>AUD</item>
+    <item>USD</item>
+  </string-array>
 
 </resources>

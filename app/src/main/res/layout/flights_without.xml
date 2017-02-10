@@ -7,6 +7,13 @@
 
 
   <TextView
+      android:id="@+id/num_of_flights2"
+      android:layout_width="1dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:gravity="center_horizontal"/>
+
+  <TextView
       android:id="@+id/departure_tv2"
       android:layout_width="1dp"
       android:layout_height="wrap_content"

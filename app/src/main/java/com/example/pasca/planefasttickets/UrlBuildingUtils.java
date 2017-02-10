@@ -32,22 +32,25 @@ public class UrlBuildingUtils {
         return builtUri;
     }
 
-    public Uri flightSearchUri(String origin, String destination, String depDate, String retDate, String adults, String children, String stops, String price, String currency){
-        Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+    public static Uri flightSearchUri(String origin, String destination, String depDate, String retDate, String adults, String children, String stops, String price, String currency){
+        Uri.Builder builtUri = Uri.parse(BASE_URL).buildUpon()
             .appendQueryParameter(API_KEY_PARAM,API_KEY)
             .appendQueryParameter(ORIGIN_PARAM, origin)
             .appendQueryParameter(DESTINATION_PARAM, destination)
-            .appendQueryParameter(DEPARTURE_PARAM, depDate)
-            .appendQueryParameter(RETURN_PARAM, retDate)
-            .appendQueryParameter(ADULTS_PARAM, adults)
-            .appendQueryParameter(CHILDREN_PARAM, children)
-            .appendQueryParameter(STOP_PARAM, stops)
-            .appendQueryParameter(PRICE_PARAM, price)
-            .appendQueryParameter(CURRENCY_PARAM, currency)
-            .appendQueryParameter(RESULTS, "10")
-            .build();
+            .appendQueryParameter(DEPARTURE_PARAM, depDate);
 
-        return builtUri;
+        if (retDate != null) builtUri.appendQueryParameter(RETURN_PARAM, retDate);
+
+
+            builtUri.appendQueryParameter(ADULTS_PARAM, adults)
+            .appendQueryParameter(CHILDREN_PARAM, children)
+            .appendQueryParameter(STOP_PARAM, stops);
+        if (price!=null)builtUri.appendQueryParameter(PRICE_PARAM, price);
+
+            builtUri.appendQueryParameter(CURRENCY_PARAM, currency)
+            .appendQueryParameter(RESULTS, "10");
+
+        return builtUri.build();
     }
 
 }

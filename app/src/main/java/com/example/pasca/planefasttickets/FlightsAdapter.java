@@ -1,7 +1,13 @@
 package com.example.pasca.planefasttickets;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.icu.util.Currency;
+import android.os.Build;
+import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,8 +53,37 @@ public class FlightsAdapter extends CursorAdapter {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
+        String dep = cursor.getString(SelectFlightsActivity.COL_FLIGHT_DEP_DATE);
+        viewHolder.depTV.setText(getTime(dep));
+
+        String arr = cursor.getString(SelectFlightsActivity.COL_FLIGHT_ARR_DATE);
+        viewHolder.arrTV.setText(getTime(arr));
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String price = cursor.getString(SelectFlightsActivity.COL_FLIGHT_PRICE);
+        viewHolder.arrTV.setText(price + preferences.getString("curr_list", "EUR"));
+
+        String numFlights = cursor.getString(SelectFlightsActivity.COL_FLIGHT_NUMBER);
+        viewHolder.numFlightsTV.setText(numFlights);
+
+        if (withReturn){
+            String depr = cursor.getString(SelectFlightsActivity.COL_FLIGHT_DEP_DATE_R);
+            viewHolder.depRetTV.setText(depr);
+
+            String arr_r = cursor.getString(SelectFlightsActivity.COL_FLIGHT_ARR_DATE_R);
+            viewHolder.depRetTV.setText(arr_r);
+
+            String numFlightsR = cursor.getString(SelectFlightsActivity.COL_FLIGHT_NUMBER_R);
+            viewHolder.numFlightsTV.setText(numFlightsR);
+        }
+
 
     }
+
+    private String getTime(String date){
+        return date.substring(date.indexOf("T") + 1);
+    }
+
 
     public static class ViewHolder{
         public final TextView depTV;
@@ -56,6 +91,8 @@ public class FlightsAdapter extends CursorAdapter {
         public final TextView depRetTV;
         public final TextView arrRetTV;
         public final TextView priceTV;
+        public final TextView numFlightsTV;
+        public final TextView numFlightsRetTV;
 
         public ViewHolder(View view, boolean flag){
             if (flag){
@@ -64,6 +101,8 @@ public class FlightsAdapter extends CursorAdapter {
                 depRetTV = (TextView) view.findViewById(R.id.departure_ret_tv);
                 arrRetTV = (TextView) view.findViewById(R.id.arrival_ret_tv);
                 priceTV = (TextView) view.findViewById(R.id.price_tv);
+                numFlightsTV = (TextView) view.findViewById(R.id.num_of_flights);
+                numFlightsRetTV = (TextView) view.findViewById(R.id.num_of_flights_r);
             }
             else{
                 depTV = (TextView) view.findViewById(R.id.departure_tv2);
@@ -71,6 +110,8 @@ public class FlightsAdapter extends CursorAdapter {
                 priceTV = (TextView) view.findViewById(R.id.price_tv2);
                 depRetTV = null;
                 arrRetTV = null;
+                numFlightsTV = (TextView) view.findViewById(R.id.num_of_flights2);
+                numFlightsRetTV = null;
             }
         }
 
